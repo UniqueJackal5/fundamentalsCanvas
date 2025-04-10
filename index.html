@@ -8,6 +8,27 @@
         <h1>This is game fundamentals in js. </h1>
         <blockquote>By UniqueJackal5</blockquote>
 
+        <div class="controls-container">
+            <div class="control-group">
+                <label>Gravity: <span id="gravityValue">0.5</span></label>
+                <input type="range" id="gravitySlider" min="0" max="2" step="0.1" value="0.5">
+            </div>
+            <div class="control-group">
+                <label>Friction: <span id="frictionValue">0.99</span></label>
+                <input type="range" id="frictionSlider" min="0.9" max="1" step="0.01" value="0.99">
+            </div>
+            <div class="control-group">
+                <label>Velocity X: <span id="velXValue">0</span></label>
+                <input type="range" id="velXSlider" min="-10" max="10" step="1" value="0">
+            </div>
+            <div class="control-group">
+                <label>Velocity Y: <span id="velYValue">0</span></label>
+                <input type="range" id="velYSlider" min="-10" max="10" step="1" value="0">
+            </div>
+            <button id="applyVelocity">Apply Velocity</button>
+            <button id="resetParams">Reset Defaults</button>
+        </div>
+
         <canvas id="mycanvas" width="800" height="600"></canvas>
 
         <!-- Link scripts below-->

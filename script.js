@@ -96,13 +96,20 @@ let ctx = canvas.getContext("2d");
 
 
 //let's try animate feature
-let x = 100;
-let y = 100;
-let dx = 2;
+let balls = [];
 let friction = 0.99;
-let dy = 0;
 let gravity = 0.5;
-const radius = 20;
+const defaultRadius = 8;
+
+class Ball {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.dx = (Math.random() - 0.5) * 10;
+    this.dy = (Math.random() - 0.5) * 10;
+    this.radius = defaultRadius * (0.5 + Math.random());
+  }
+}
 
 // Add event listeners for controls
 document.getElementById('gravitySlider').addEventListener('input', function(e) {
@@ -124,8 +131,9 @@ document.getElementById('velYSlider').addEventListener('input', function(e) {
 });
 
 document.getElementById('applyVelocity').addEventListener('click', function() {
-    dx = parseFloat(document.getElementById('velXSlider').value);
-    dy = parseFloat(document.getElementById('velYSlider').value);
+    // Initialize balls array with specified count
+    const ballCount = parseInt(document.getElementById('ballCount').value) || 5;
+    balls = Array.from({length: ballCount}, () => new Ball());
 });
 
 document.getElementById('resetParams').addEventListener('click', function() {
@@ -140,49 +148,46 @@ document.getElementById('resetParams').addEventListener('click', function() {
     document.getElementById('velXValue').textContent = 0;
     document.getElementById('velYValue').textContent = 0;
     
-    // Reset ball position and velocity
-    x = 100;
-    y = 100;
-    dx = 0;
-    dy = 0;
+    // Reset balls array
+    balls = Array.from({length: 5}, () => new Ball());
+    document.getElementById('ballCount').value = 5;
 });
 
 function update(){
     ctx.clearRect(0,0, canvas.width, canvas.height);
 
-
-    //draw the ball
-    ball();             
+    // Draw all balls
+    balls.forEach(b => ball(b));
     requestAnimationFrame(update);
 }
 
-function ball(){
+function ball(b){
     ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
-    ctx.fillStyle = "blue";
+    ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+    ctx.fillStyle = `hsl(${Math.random() * 360}, 70%, 60%)`;
     ctx.fill();
 
-    //move the ball by dx and dy
-    x += dx;
-    y += dy;
-    dy += gravity;
-    dx *= friction;
-    dy *= friction * 0.98; // Add air resistance
+    // Update ball physics
+    b.x += b.dx;
+    b.y += b.dy;
+    b.dy += gravity;
+    b.dx *= friction;
+    b.dy *= friction * 0.98;
     
     // Stop micro movements
-    if(Math.abs(dx) < 0.5) dx = 0;
+    if(Math.abs(b.dx) < 0.5) b.dx = 0;
 
-    //let's make the ball bouncy on the edges
-    if(x + radius >canvas.width || x-radius < 0){
-        dx = -dx * friction;
+    // Handle canvas boundaries
+    if(b.x + b.radius > canvas.width || b.x - b.radius < 0) {
+        b.dx = -b.dx * friction;
     }
-    if(y + radius > canvas.height - 0.1) {
-        dy = -dy * 0.7;
-        y = canvas.height - radius;
-        if(Math.abs(dy) < 0.5) dy = 0; // Stop micro bounces
+    if(b.y + b.radius > canvas.height - 0.1) {
+        b.dy = -b.dy * 0.7;
+        b.y = canvas.height - b.radius;
+        if(Math.abs(b.dy) < 0.5) b.dy = 0;
     }
-    if(y - radius < 0) {
-        dy = -dy;
+    if(b.y - b.radius < 0) {
+        b.dy = -b.dy;
     }
 }
 

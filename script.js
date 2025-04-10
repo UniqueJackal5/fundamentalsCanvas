@@ -116,16 +116,16 @@ document.getElementById('frictionSlider').addEventListener('input', function(e) 
 });
 
 document.getElementById('velXSlider').addEventListener('input', function(e) {
-    document.getElementById('velXValue').textContent = e.target.value;
+    document.getElementById('velXValue').textContent = parseFloat(e.target.value).toFixed(1);
 });
 
 document.getElementById('velYSlider').addEventListener('input', function(e) {
-    document.getElementById('velYValue').textContent = e.target.value;
+    document.getElementById('velYValue').textContent = parseFloat(e.target.value).toFixed(1);
 });
 
 document.getElementById('applyVelocity').addEventListener('click', function() {
-    dx = parseInt(document.getElementById('velXSlider').value);
-    dy = parseInt(document.getElementById('velYSlider').value);
+    dx = parseFloat(document.getElementById('velXSlider').value);
+    dy = parseFloat(document.getElementById('velYSlider').value);
 });
 
 document.getElementById('resetParams').addEventListener('click', function() {
